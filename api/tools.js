@@ -1,44 +1,39 @@
-let mode = 'tiktok';
+export default async function handler(req, res) {
+    // تحديد الرؤوس للسماح بالطلبات (CORS)
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    
+    const { url, type } = req.query;
 
-        function setTool(t, el) {
-            mode = t;
-            document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById('displayArea').style.display = 'none';
-        }
+    if (!url) {
+        return res.status(400).json({ success: false, error: "URL missing" });
+    }
 
-        document.getElementById('goBtn').onclick = async () => {
-            const val = document.getElementById('urlInput').value.trim();
-            if(!val) return alert('الرجاء إدخال الرابط');
-            
-            const btn = document.getElementById('goBtn');
-            btn.innerText = 'جاري المعالجة...';
-            
-            try {
-                // نستخدم مسار api/tools الذي أنشأناه
-                const response = await fetch(`/api/tools?url=${encodeURIComponent(val)}&type=${mode}`);
-                
-                if (!response.ok) throw new Error('السيرفر لا يستجيب');
-                
-                const j = await response.json();
+    try {
+        if (type === "yt_thumb") {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            const videoId = match ? match[1] : null;
 
-                if (mode === 'tiktok' && j.code === 0) {
-                    document.getElementById('resImg').src = j.data.cover;
-                    document.getElementById('dlLink').href = j.data.hdplay || j.data.play;
-                    document.getElementById('displayArea').style.display = 'block';
-                } 
-                else if (mode === 'yt_thumb' && j.success) {
-                    document.getElementById('resImg').src = j.data.high;
-                    document.getElementById('dlLink').href = j.data.high;
-                    document.getElementById('displayArea').style.display = 'block';
-                } 
-                else {
-                    alert('هذا الرابط لا يحتوي على بيانات عامة أو غير مدعوم');
-                }
-            } catch (e) {
-                console.error(e);
-                alert('حدث خطأ في الاتصال: تأكد من رفع ملف api/tools.js بشكل صحيح');
-            } finally {
-                btn.innerText = 'بدء السحر';
+            if (videoId) {
+                return res.status(200).json({
+                    success: true,
+                    data: { high: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` }
+                });
             }
+            return res.status(400).json({ success: false, error: "Invalid YouTube URL" });
         }
+
+        if (type === "tiktok") {
+            // استخدام fetch المدمج في Vercel (Node.js 18+)
+            const response = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`);
+            const result = await response.json();
+            return res.status(200).json(result);
+        }
+
+        return res.status(400).json({ success: false, error: "Unsupported type" });
+
+    } catch (error) {
+        // في حال حدوث أي خطأ، نرسل رسالة واضحة بدلاً من انهيار السيرفر
+        return res.status(500).json({ success: false, error: error.message });
+    }
+}
