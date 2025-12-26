@@ -4,97 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NexDown | المحرك الذكي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@latest/dist/bundle.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #6366f1; --secondary: #a855f7; --accent: #22d3ee; --bg: #030712; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
         body { background-color: var(--bg); color: white; overflow-x: hidden; background-image: linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px); background-size: 50px 50px; }
-        .blur-ball { position: absolute; width: 400px; height: 400px; background: radial-gradient(var(--primary), transparent 70%); filter: blur(80px); opacity: 0.2; z-index: -1; }
         nav { padding: 20px 8%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(15px); }
-        .logo { font-size: 1.6rem; font-weight: 800; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero { text-align: center; padding: 60px 20px; }
-        .hero h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 10px; }
+        .logo { font-size: 1.6rem; font-weight: 900; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero { text-align: center; padding: 40px 20px; }
+        .hero h1 { font-size: 3rem; font-weight: 900; margin-bottom: 10px; }
         .hero span { background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto 40px; padding: 0 20px; }
-        .tool-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 25px; border-radius: 24px; cursor: pointer; transition: 0.4s; text-align: center; }
-        .tool-card:hover { background: rgba(255,255,255,0.07); transform: translateY(-5px); }
-        .tool-card.active { border-color: var(--accent); background: rgba(34, 211, 238, 0.05); box-shadow: 0 0 20px rgba(34, 211, 238, 0.1); }
-        .main-interface { max-width: 700px; margin: 0 auto; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 32px; padding: 30px; backdrop-filter: blur(20px); }
-        .input-wrapper { margin-bottom: 25px; }
-        input[type="text"], input[type="file"] { width: 100%; padding: 18px 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; font-size: 1rem; outline: none; }
-        .btn-magic { width: 100%; padding: 18px; border-radius: 16px; border: none; background: linear-gradient(45deg, var(--primary), var(--secondary)); color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
-        #displayArea { display: none; margin-top: 30px; text-align: center; }
-        .res-img { width: 100%; max-width: 450px; border-radius: 20px; border: 1px solid var(--border); }
-        .dl-btn { display: inline-block; margin-top: 15px; color: var(--accent); text-decoration: none; font-weight: 800; font-size: 1.2rem; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; max-width: 900px; margin: 0 auto 30px; padding: 0 20px; }
+        .tool-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; text-align: center; }
+        .tool-card.active { border-color: var(--accent); background: rgba(34, 211, 238, 0.05); }
+        .main-interface { max-width: 600px; margin: 0 auto; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px; padding: 30px; }
+        input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; font-size: 1rem; outline: none; margin-bottom: 20px; }
+        .btn-magic { width: 100%; padding: 15px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--primary), var(--secondary)); color: white; font-weight: 700; cursor: pointer; }
+        #displayArea { display: none; margin-top: 25px; text-align: center; }
+        .res-img { width: 100%; max-width: 400px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .dl-btn { display: inline-block; margin-top: 15px; color: var(--accent); text-decoration: none; font-weight: 800; }
     </style>
 </head>
 <body>
-    <div class="blur-ball" style="top: -100px; right: -100px;"></div>
-    <nav><div class="logo">NexDown.io</div></nav>
-    <section class="hero"><h1>Nex<span>Down</span></h1><p>الأدوات الاحترافية في مكان واحد</p></section>
+    <nav><div class="logo">NexDown</div></nav>
+    <section class="hero"><h1>Nex<span>Down</span></h1><p>أدوات سريعة، ذكية، ومجانية</p></section>
 
     <div class="tools-grid">
-        <div class="tool-card active" id="btn-tiktok" onclick="setTool('tiktok')"><h3>TikTok</h3><p>بدون علامة مائية</p></div>
-        <div class="tool-card" id="btn-yt" onclick="setTool('yt_thumb')"><h3>YouTube</h3><p>صور مصغرة 4K</p></div>
-        <div class="tool-card" id="btn-bg" onclick="setTool('bg_rem')"><h3>AI Remove</h3><p>مسح خلفية الصور</p></div>
+        <div class="tool-card active" onclick="setMode('tiktok', this)"><h4>تيك توك</h4></div>
+        <div class="tool-card" onclick="setMode('yt_thumb', this)"><h4>صور يوتيوب</h4></div>
+        <div class="tool-card" onclick="setMode('yt_info', this)"><h4>بيانات الفيديو</h4></div>
     </div>
 
     <div class="main-interface">
-        <div class="input-wrapper">
-            <input type="text" id="urlInput" placeholder="ضع الرابط هنا...">
-            <input type="file" id="fileInput" accept="image/*" style="display: none;">
-        </div>
+        <input type="text" id="urlInput" placeholder="ضع الرابط هنا...">
         <button class="btn-magic" id="goBtn">بدء السحر</button>
         <div id="displayArea">
             <img id="resImg" class="res-img" src="">
-            <br><a href="#" id="dlLink" class="dl-btn" target="_blank">تحميل النتيجة ↓</a>
+            <div id="infoText" style="margin-top: 15px; font-size: 0.9rem; color: #ccc;"></div>
+            <a href="#" id="dlLink" class="dl-btn" target="_blank">تحميل النتيجة ↓</a>
         </div>
     </div>
 
     <script>
-        // استبدل قسم الـ script في index.html بهذا الكود الصافي والمجرب
-let mode = 'tiktok';
+        let currentMode = 'tiktok';
 
-function setTool(t) {
-    mode = t;
-    document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-    document.getElementById('displayArea').style.display = 'none';
-}
-
-document.getElementById('goBtn').onclick = async () => {
-    const val = document.getElementById('urlInput').value.trim();
-    if(!val) return alert('أدخل الرابط');
-    const btn = document.getElementById('goBtn');
-    btn.innerText = 'جاري العمل...';
-
-    try {
-        const r = await fetch(`/api/tools?url=${encodeURIComponent(val)}&type=${mode}`);
-        const j = await r.json();
-
-        if (mode === 'tiktok' && j.code === 0) {
-            showResult(j.data.cover, j.data.hdplay || j.data.play);
-        } else if (mode === 'yt_thumb' && j.success) {
-            showResult(j.data.high, j.data.high);
-        } else if (mode === 'yt_info' && j.success) {
-            alert("عنوان الفيديو: " + j.data.title + "\nصاحب القناة: " + j.data.author);
-        } else {
-            alert('تأكد من الرابط أو نوع الأداة');
+        function setMode(mode, el) {
+            currentMode = mode;
+            document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('displayArea').style.display = 'none';
         }
-    } catch (e) {
-        alert('خطأ في الاتصال بالسيرفر');
-    } finally {
-        btn.innerText = 'بدء السحر';
-    }
-}
 
-function showResult(img, link) {
-    document.getElementById('resImg').src = img;
-    document.getElementById('dlLink').href = link;
-    document.getElementById('displayArea').style.display = 'block';
-}
+        document.getElementById('goBtn').onclick = async () => {
+            const url = document.getElementById('urlInput').value.trim();
+            if(!url) return alert('يرجى وضع الرابط');
+            
+            const btn = document.getElementById('goBtn');
+            btn.innerText = 'جاري المعالجة...';
+            btn.disabled = true;
+
+            try {
+                const r = await fetch(`/api/tools?url=${encodeURIComponent(url)}&type=${currentMode}`);
+                const j = await r.json();
+
+                if (currentMode === 'tiktok' && j.code === 0) {
+                    show(j.data.cover, j.data.hdplay || j.data.play, "");
+                } else if (currentMode === 'yt_thumb' && j.success) {
+                    show(j.data.high, j.data.high, "");
+                } else if (currentMode === 'yt_info' && j.success) {
+                    show(j.data.high, j.data.high, "العنوان: " + j.data.title);
+                } else {
+                    alert('فشل جلب البيانات، تأكد من الرابط');
+                }
+            } catch (e) {
+                alert('خطأ في الاتصال بالسيرفر');
+            } finally {
+                btn.innerText = 'بدء السحر';
+                btn.disabled = false;
+            }
+        };
+
+        function show(img, link, text) {
+            document.getElementById('resImg').src = img;
+            document.getElementById('dlLink').href = link;
+            document.getElementById('infoText').innerText = text;
+            document.getElementById('displayArea').style.display = 'block';
+        }
     </script>
 </body>
 </html>
-
