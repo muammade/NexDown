@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> NexDown </title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@latest/dist/bundle.js"></script>
     <style>
         :root {
             --primary: #6366f1;
@@ -122,6 +123,7 @@
     <div class="main-interface">
         <div class="input-wrapper">
             <input type="text" id="urlInput" placeholder="أدخل الرابط هنا...">
+            <input type="file" id="fileInput" accept="image/*" style="display: none; width: 100%; padding: 15px; background: rgba(0,0,0,0.4); border-radius: 16px; color: white;">
         </div>
         <button class="btn-magic" id="goBtn">بدء السحر</button>
 
@@ -169,3 +171,4 @@
     </script>
 </body>
 </html>
+
