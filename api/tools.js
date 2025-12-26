@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
     const { url, type } = req.query;
-    if (!url) return res.status(400).json({ error: "No URL" });
+    if (!url) return res.status(400).json({ success: false });
 
     try {
         if (type === "tiktok") {
@@ -9,25 +9,22 @@ export default async function handler(req, res) {
             return res.status(200).json(j);
         }
 
-        if (type === "yt_thumb" || type === "yt_info") {
-            const vId = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1];
-            if (!vId) return res.status(400).json({ error: "Invalid YouTube URL" });
-
-            if (type === "yt_thumb") {
-                return res.status(200).json({ success: true, data: { high: `https://img.youtube.com/vi/${vId}/maxresdefault.jpg` } });
+        if (type === "insta") {
+            // استخدام محرك خارجي خفيف لتحميل الريلز والصور من انستجرام
+            const r = await fetch(`https://api.vkrdown.com/instavideo/?url=${encodeURIComponent(url)}`);
+            const j = await r.json();
+            if(j.data && j.data.length > 0) {
+                return res.status(200).json({ success: true, data: { url: j.data[0].url, thumbnail: j.data[0].thumbnail } });
             }
-
-            const infoRes = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${vId}`);
-            const infoData = await infoRes.json();
-            return res.status(200).json({ 
-                success: true, 
-                data: { 
-                    title: infoData.title, 
-                    high: `https://img.youtube.com/vi/${vId}/maxresdefault.jpg` 
-                } 
-            });
         }
+
+        if (type === "yt_thumb") {
+            const vId = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1];
+            if (vId) return res.status(200).json({ success: true, data: { high: `https://img.youtube.com/vi/${vId}/maxresdefault.jpg` } });
+        }
+        
+        return res.status(404).json({ success: false });
     } catch (e) {
-        return res.status(500).json({ error: "Server Error" });
+        return res.status(500).json({ success: false });
     }
 }
