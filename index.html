@@ -53,60 +53,48 @@
     </div>
 
     <script>
-        let mode = 'tiktok';
-        const urlInput = document.getElementById('urlInput');
-        const fileInput = document.getElementById('fileInput');
+        // استبدل قسم الـ script في index.html بهذا الكود الصافي والمجرب
+let mode = 'tiktok';
 
-        function setTool(t) {
-            mode = t;
-            document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-            if(t === 'tiktok') document.getElementById('btn-tiktok').classList.add('active');
-            if(t === 'yt_thumb') document.getElementById('btn-yt').classList.add('active');
-            if(t === 'bg_rem') document.getElementById('btn-bg').classList.add('active');
-            
-            document.getElementById('displayArea').style.display = 'none';
-            if(t === 'bg_rem') {
-                urlInput.style.display = 'none';
-                fileInput.style.display = 'block';
-            } else {
-                urlInput.style.display = 'block';
-                fileInput.style.display = 'none';
-            }
+function setTool(t) {
+    mode = t;
+    document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.getElementById('displayArea').style.display = 'none';
+}
+
+document.getElementById('goBtn').onclick = async () => {
+    const val = document.getElementById('urlInput').value.trim();
+    if(!val) return alert('أدخل الرابط');
+    const btn = document.getElementById('goBtn');
+    btn.innerText = 'جاري العمل...';
+
+    try {
+        const r = await fetch(`/api/tools?url=${encodeURIComponent(val)}&type=${mode}`);
+        const j = await r.json();
+
+        if (mode === 'tiktok' && j.code === 0) {
+            showResult(j.data.cover, j.data.hdplay || j.data.play);
+        } else if (mode === 'yt_thumb' && j.success) {
+            showResult(j.data.high, j.data.high);
+        } else if (mode === 'yt_info' && j.success) {
+            alert("عنوان الفيديو: " + j.data.title + "\nصاحب القناة: " + j.data.author);
+        } else {
+            alert('تأكد من الرابط أو نوع الأداة');
         }
+    } catch (e) {
+        alert('خطأ في الاتصال بالسيرفر');
+    } finally {
+        btn.innerText = 'بدء السحر';
+    }
+}
 
-        document.getElementById('goBtn').onclick = async () => {
-            const btn = document.getElementById('goBtn');
-            btn.disabled = true;
-
-            if(mode === 'bg_rem') {
-                if(!fileInput.files[0]) { alert('اختر صورة أولاً'); btn.disabled = false; return; }
-                btn.innerText = 'جاري المعالجة بالذكاء الاصطناعي...';
-                try {
-                    const blob = await imglyRemoveBackground(fileInput.files[0]);
-                    const url = URL.createObjectURL(blob);
-                    document.getElementById('resImg').src = url;
-                    document.getElementById('dlLink').href = url;
-                    document.getElementById('dlLink').download = "NexDown_NoBG.png";
-                    document.getElementById('displayArea').style.display = 'block';
-                } catch (e) { alert('خطأ في المعالجة'); }
-            } else {
-                const val = urlInput.value.trim();
-                if(!val) { alert('أدخل الرابط'); btn.disabled = false; return; }
-                btn.innerText = 'جاري جلب البيانات...';
-                try {
-                    const r = await fetch(`/api/tools?url=${encodeURIComponent(val)}&type=${mode}`);
-                    const j = await r.json();
-                    if((mode==='tiktok' && j.code===0) || (mode==='yt_thumb' && j.success)) {
-                        const d = j.data;
-                        document.getElementById('resImg').src = mode==='tiktok' ? d.cover : d.high;
-                        document.getElementById('dlLink').href = mode==='tiktok' ? (d.hdplay||d.play) : d.high;
-                        document.getElementById('displayArea').style.display = 'block';
-                    } else { alert('رابط غير صحيح'); }
-                } catch(e) { alert('خطأ في الاتصال'); }
-            }
-            btn.innerText = 'بدء السحر';
-            btn.disabled = false;
-        }
+function showResult(img, link) {
+    document.getElementById('resImg').src = img;
+    document.getElementById('dlLink').href = link;
+    document.getElementById('displayArea').style.display = 'block';
+}
     </script>
 </body>
 </html>
+
