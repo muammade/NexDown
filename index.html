@@ -3,92 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexDown | المحرك الذكي</title>
+    <title>NexDown | المنصة الشاملة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #6366f1; --secondary: #a855f7; --accent: #22d3ee; --bg: #030712; }
+        :root { --main: #00f2fe; --sub: #4facfe; --dark: #080a12; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg); color: white; overflow-x: hidden; background-image: linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px); background-size: 50px 50px; }
-        nav { padding: 20px 8%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(15px); }
-        .logo { font-size: 1.6rem; font-weight: 900; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero { text-align: center; padding: 40px 20px; }
-        .hero h1 { font-size: 3rem; font-weight: 900; margin-bottom: 10px; }
-        .hero span { background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; max-width: 900px; margin: 0 auto 30px; padding: 0 20px; }
-        .tool-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; text-align: center; }
-        .tool-card.active { border-color: var(--accent); background: rgba(34, 211, 238, 0.05); }
-        .main-interface { max-width: 600px; margin: 0 auto; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px; padding: 30px; }
-        input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; font-size: 1rem; outline: none; margin-bottom: 20px; }
-        .btn-magic { width: 100%; padding: 15px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--primary), var(--secondary)); color: white; font-weight: 700; cursor: pointer; }
-        #displayArea { display: none; margin-top: 25px; text-align: center; }
-        .res-img { width: 100%; max-width: 400px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .dl-btn { display: inline-block; margin-top: 15px; color: var(--accent); text-decoration: none; font-weight: 800; }
+        body { background: var(--dark); color: white; min-height: 100vh; overflow-x: hidden; }
+        
+        /* خلفية سينمائية متحركة */
+        .bg-animate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
+            background: radial-gradient(circle at 50% 50%, #1a1f35 0%, #080a12 100%); }
+        .glow { position: absolute; width: 300px; height: 300px; background: var(--sub); filter: blur(120px); opacity: 0.15; border-radius: 50%; animation: move 10s infinite alternate; }
+        @keyframes move { from { transform: translate(-10%, -10%); } to { transform: translate(100%, 50%); } }
+
+        nav { padding: 25px 5%; display: flex; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { font-size: 2rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #fff; text-shadow: 0 0 15px var(--sub); }
+        
+        .container { max-width: 800px; margin: 40px auto; padding: 20px; text-align: center; }
+        .hero-title { font-size: 2.8rem; font-weight: 900; margin-bottom: 10px; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .tab { padding: 12px 25px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; cursor: pointer; transition: 0.3s; font-weight: 700; }
+        .tab.active { background: var(--sub); border-color: var(--main); box-shadow: 0 0 20px rgba(79, 172, 254, 0.4); color: #000; }
+
+        .search-box { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; backdrop-filter: blur(10px); }
+        input { flex: 1; background: transparent; border: none; padding: 15px; color: white; font-size: 1.1rem; outline: none; text-align: right; }
+        .btn { padding: 0 30px; border-radius: 15px; border: none; background: #fff; color: #000; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .btn:hover { transform: scale(1.05); background: var(--main); }
+
+        #result { display: none; margin-top: 40px; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .preview-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        .preview-img { width: 100%; max-width: 300px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .dl-link { display: block; color: var(--main); font-weight: 900; text-decoration: none; font-size: 1.2rem; }
     </style>
 </head>
 <body>
-    <nav><div class="logo">NexDown</div></nav>
-    <section class="hero"><h1>Nex<span>Down</span></h1><p>أدوات سريعة، ذكية، ومجانية</p></section>
+    <div class="bg-animate"></div>
+    <div class="glow"></div>
+    
+    <nav><div class="logo">NEXDOWN</div></nav>
 
-    <div class="tools-grid">
-        <div class="tool-card active" onclick="setMode('tiktok', this)"><h4>تيك توك</h4></div>
-        <div class="tool-card" onclick="setMode('yt_thumb', this)"><h4>صور يوتيوب</h4></div>
-        <div class="tool-card" onclick="setMode('yt_info', this)"><h4>بيانات الفيديو</h4></div>
-    </div>
+    <div class="container">
+        <h1 class="hero-title">تحميل المحتوى بلمشة واحدة</h1>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="setMode('tiktok', this)">TikTok</div>
+            <div class="tab" onclick="setMode('insta', this)">Instagram</div>
+            <div class="tab" onclick="setMode('yt_thumb', this)">YouTube</div>
+        </div>
 
-    <div class="main-interface">
-        <input type="text" id="urlInput" placeholder="ضع الرابط هنا...">
-        <button class="btn-magic" id="goBtn">بدء السحر</button>
-        <div id="displayArea">
-            <img id="resImg" class="res-img" src="">
-            <div id="infoText" style="margin-top: 15px; font-size: 0.9rem; color: #ccc;"></div>
-            <a href="#" id="dlLink" class="dl-btn" target="_blank">تحميل النتيجة ↓</a>
+        <div class="search-box">
+            <input type="text" id="url" placeholder="ضع الرابط هنا...">
+            <button class="btn" id="go">بدء</button>
+        </div>
+
+        <div id="result">
+            <div class="preview-card">
+                <img id="resImg" class="preview-img" src="">
+                <a href="#" id="resLink" class="dl-link" target="_blank">تحميل الملف الآن ↓</a>
+            </div>
         </div>
     </div>
 
     <script>
-        let currentMode = 'tiktok';
-
-        function setMode(mode, el) {
-            currentMode = mode;
-            document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+        let mode = 'tiktok';
+        function setMode(m, el) {
+            mode = m;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
-            document.getElementById('displayArea').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
         }
 
-        document.getElementById('goBtn').onclick = async () => {
-            const url = document.getElementById('urlInput').value.trim();
-            if(!url) return alert('يرجى وضع الرابط');
+        document.getElementById('go').onclick = async () => {
+            const val = document.getElementById('url').value.trim();
+            if(!val) return;
+            const btn = document.getElementById('go');
+            btn.innerText = '...';
             
-            const btn = document.getElementById('goBtn');
-            btn.innerText = 'جاري المعالجة...';
-            btn.disabled = true;
-
             try {
-                const r = await fetch(`/api/tools?url=${encodeURIComponent(url)}&type=${currentMode}`);
+                const r = await fetch(`/api/tools?url=${encodeURIComponent(val)}&type=${mode}`);
                 const j = await r.json();
 
-                if (currentMode === 'tiktok' && j.code === 0) {
-                    show(j.data.cover, j.data.hdplay || j.data.play, "");
-                } else if (currentMode === 'yt_thumb' && j.success) {
-                    show(j.data.high, j.data.high, "");
-                } else if (currentMode === 'yt_info' && j.success) {
-                    show(j.data.high, j.data.high, "العنوان: " + j.data.title);
-                } else {
-                    alert('فشل جلب البيانات، تأكد من الرابط');
-                }
-            } catch (e) {
-                alert('خطأ في الاتصال بالسيرفر');
-            } finally {
-                btn.innerText = 'بدء السحر';
-                btn.disabled = false;
-            }
-        };
-
-        function show(img, link, text) {
-            document.getElementById('resImg').src = img;
-            document.getElementById('dlLink').href = link;
-            document.getElementById('infoText').innerText = text;
-            document.getElementById('displayArea').style.display = 'block';
+                if (j.success || j.code === 0) {
+                    const d = j.data;
+                    document.getElementById('resImg').src = (mode === 'tiktok') ? d.cover : (mode === 'insta' ? d.thumbnail : d.high);
+                    document.getElementById('resLink').href = (mode === 'tiktok') ? (d.hdplay || d.play) : (mode === 'insta' ? d.url : d.high);
+                    document.getElementById('result').style.display = 'block';
+                } else { alert('عذراً، الرابط غير مدعوم'); }
+            } catch (e) { alert('خطأ في السيرفر'); }
+            btn.innerText = 'بدء';
         }
     </script>
 </body>
