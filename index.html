@@ -87,13 +87,33 @@
 
                 if (j.success || j.code === 0) {
                     const d = j.data;
-                    document.getElementById('resImg').src = (mode === 'tiktok') ? d.cover : (mode === 'insta' ? d.thumbnail : d.high);
-                    document.getElementById('resLink').href = (mode === 'tiktok') ? (d.hdplay || d.play) : (mode === 'insta' ? d.url : d.high);
+                    let finalImg = "";
+                    let finalLink = "";
+
+                    if (mode === 'tiktok') {
+                        finalImg = d.cover;
+                        finalLink = d.hdplay || d.play;
+                    } else if (mode === 'insta') {
+                        finalImg = d.thumbnail;
+                        finalLink = d.url;
+                    } else {
+                        finalImg = d.high;
+                        finalLink = d.high;
+                    }
+
+                    document.getElementById('resImg').src = finalImg;
+                    document.getElementById('resLink').href = finalLink;
                     document.getElementById('result').style.display = 'block';
-                } else { alert('عذراً، الرابط غير مدعوم'); }
-            } catch (e) { alert('خطأ في السيرفر'); }
+                    
+                    // تحسين: فتح الرابط مباشرة في حال كان انستجرام فيديو
+                    if(mode === 'insta') document.getElementById('resLink').innerText = "اضغط هنا لتحميل الريلز / الصورة";
+                } else { 
+                    alert('هذا الرابط لم ينجح، جرب رابطاً آخر من انستجرام'); 
+                }
+            } catch (e) { alert('خطأ في الاتصال'); }
             btn.innerText = 'بدء';
         }
     </script>
 </body>
 </html>
+
