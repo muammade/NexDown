@@ -3,172 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> NexDown </title>
+    <title>NexDown | المحرك الذكي</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@latest/dist/bundle.js"></script>
     <style>
-        :root {
-            --primary: #6366f1;
-            --secondary: #a855f7;
-            --accent: #22d3ee;
-            --bg: #030712;
-        }
-
+        :root { --primary: #6366f1; --secondary: #a855f7; --accent: #22d3ee; --bg: #030712; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif; }
-        
-        body { 
-            background-color: var(--bg); 
-            color: white; 
-            overflow-x: hidden;
-            background-image: 
-                linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-
-        /* الإضاءة الخلفية (Glow Effects) */
-        .blur-ball {
-            position: absolute; width: 400px; height: 400px;
-            background: radial-gradient(var(--primary), transparent 70%);
-            filter: blur(80px); opacity: 0.2; z-index: -1;
-        }
-
-        nav {
-            padding: 25px 8%; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(15px);
-        }
-
+        body { background-color: var(--bg); color: white; overflow-x: hidden; background-image: linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px); background-size: 50px 50px; }
+        .blur-ball { position: absolute; width: 400px; height: 400px; background: radial-gradient(var(--primary), transparent 70%); filter: blur(80px); opacity: 0.2; z-index: -1; }
+        nav { padding: 20px 8%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(15px); }
         .logo { font-size: 1.6rem; font-weight: 800; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .hero { text-align: center; padding: 80px 20px; }
-        .hero h1 { font-size: 4rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 20px; line-height: 1; }
+        .hero { text-align: center; padding: 60px 20px; }
+        .hero h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 10px; }
         .hero span { background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* حاوية الأدوات */
-        .tools-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px; max-width: 1100px; margin: 0 auto 50px; padding: 0 20px;
-        }
-
-        .tool-card {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-            padding: 30px; border-radius: 24px; cursor: pointer; transition: 0.4s;
-            text-align: center; position: relative; overflow: hidden;
-        }
-        .tool-card:hover { 
-            background: rgba(255,255,255,0.07); transform: translateY(-10px);
-            border-color: var(--primary);
-        }
-        .tool-card.active { border-color: var(--accent); background: rgba(34, 211, 238, 0.05); }
-
-        .main-interface {
-            max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 32px;
-            padding: 40px; backdrop-filter: blur(20px);
-        }
-
-        .input-wrapper {
-            position: relative; margin-bottom: 30px;
-        }
-        input {
-            width: 100%; padding: 20px 25px; border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4);
-            color: white; font-size: 1.1rem; outline: none; transition: 0.3s;
-        }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 25px rgba(99, 102, 241, 0.2); }
-
-        .btn-magic {
-            width: 100%; padding: 20px; border-radius: 16px; border: none;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3); transition: 0.3s;
-        }
-        .btn-magic:hover { transform: scale(1.02); box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5); }
-
-        #displayArea { display: none; margin-top: 40px; text-align: center; }
-        .res-img { width: 100%; max-width: 500px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-
-        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto 40px; padding: 0 20px; }
+        .tool-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 25px; border-radius: 24px; cursor: pointer; transition: 0.4s; text-align: center; }
+        .tool-card:hover { background: rgba(255,255,255,0.07); transform: translateY(-5px); }
+        .tool-card.active { border-color: var(--accent); background: rgba(34, 211, 238, 0.05); box-shadow: 0 0 20px rgba(34, 211, 238, 0.1); }
+        .main-interface { max-width: 700px; margin: 0 auto; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 32px; padding: 30px; backdrop-filter: blur(20px); }
+        .input-wrapper { margin-bottom: 25px; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 18px 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; font-size: 1rem; outline: none; }
+        .btn-magic { width: 100%; padding: 18px; border-radius: 16px; border: none; background: linear-gradient(45deg, var(--primary), var(--secondary)); color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+        #displayArea { display: none; margin-top: 30px; text-align: center; }
+        .res-img { width: 100%; max-width: 450px; border-radius: 20px; border: 1px solid var(--border); }
+        .dl-btn { display: inline-block; margin-top: 15px; color: var(--accent); text-decoration: none; font-weight: 800; font-size: 1.2rem; }
     </style>
 </head>
 <body>
     <div class="blur-ball" style="top: -100px; right: -100px;"></div>
-    <div class="blur-ball" style="bottom: -100px; left: -100px; background: var(--secondary);"></div>
-
-    <nav>
-        <div class="logo">NexTools.io</div>
-        <div style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem;">V2.0 PRO</div>
-    </nav>
-
-    <section class="hero">
-        <h1>صندوق أدوات <span>المحتوى</span></h1>
-        <p>الجيل القادم من أدوات الذكاء الاصطناعي للمبدعين</p>
-    </section>
+    <nav><div class="logo">NexDown.io</div></nav>
+    <section class="hero"><h1>Nex<span>Down</span></h1><p>الأدوات الاحترافية في مكان واحد</p></section>
 
     <div class="tools-grid">
-        <div class="tool-card active" onclick="setTool('tiktok', this)">
-            <h3>TikTok Downloader</h3>
-            <p style="color: #666; font-size: 0.8rem; margin-top: 10px;">تحميل بدون علامة مائية</p>
-        </div>
-        <div class="tool-card" onclick="setTool('yt_thumb', this)">
-            <h3>YouTube Thumbnails</h3>
-            <p style="color: #666; font-size: 0.8rem; margin-top: 10px;">استخراج الأغلفة بجودة 4K</p>
-        </div>
-        <div class="tool-card" onclick="setTool('bg_rem', this)">
-            <h3>BG Remover (AI)</h3>
-            <p style="color: #666; font-size: 0.8rem; margin-top: 10px;">إزالة الخلفية قريباً</p>
-        </div>
+        <div class="tool-card active" id="btn-tiktok" onclick="setTool('tiktok')"><h3>TikTok</h3><p>بدون علامة مائية</p></div>
+        <div class="tool-card" id="btn-yt" onclick="setTool('yt_thumb')"><h3>YouTube</h3><p>صور مصغرة 4K</p></div>
+        <div class="tool-card" id="btn-bg" onclick="setTool('bg_rem')"><h3>AI Remove</h3><p>مسح خلفية الصور</p></div>
     </div>
 
     <div class="main-interface">
         <div class="input-wrapper">
-            <input type="text" id="urlInput" placeholder="أدخل الرابط هنا...">
-            <input type="file" id="fileInput" accept="image/*" style="display: none; width: 100%; padding: 15px; background: rgba(0,0,0,0.4); border-radius: 16px; color: white;">
+            <input type="text" id="urlInput" placeholder="ضع الرابط هنا...">
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
         </div>
         <button class="btn-magic" id="goBtn">بدء السحر</button>
-
         <div id="displayArea">
             <img id="resImg" class="res-img" src="">
-            <div style="margin-top: 20px;">
-                <a href="#" id="dlLink" style="color: var(--accent); text-decoration: none; font-weight: 800; font-size: 1.2rem;" target="_blank">تحميل الملف الآن ↓</a>
-            </div>
+            <br><a href="#" id="dlLink" class="dl-btn" target="_blank">تحميل النتيجة ↓</a>
         </div>
-    </div>
-
-    <div style="margin: 50px auto; text-align: center; max-width: 728px;">
-        <script async src="https://pl28334678.effectivegatecpm.com/f54e9c6f51b6bf561ffbceea1f602cc5/invoke.js"></script>
-        <div id="container-f54e9c6f51b6bf561ffbceea1f602cc5"></div>
     </div>
 
     <script>
         let mode = 'tiktok';
-        function setTool(t, el) {
+        const urlInput = document.getElementById('urlInput');
+        const fileInput = document.getElementById('fileInput');
+
+        function setTool(t) {
             mode = t;
             document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-            if(t === 'bg_rem') alert('هذه الميزة ستتوفر في التحديث القادم!');
+            if(t === 'tiktok') document.getElementById('btn-tiktok').classList.add('active');
+            if(t === 'yt_thumb') document.getElementById('btn-yt').classList.add('active');
+            if(t === 'bg_rem') document.getElementById('btn-bg').classList.add('active');
+            
+            document.getElementById('displayArea').style.display = 'none';
+            if(t === 'bg_rem') {
+                urlInput.style.display = 'none';
+                fileInput.style.display = 'block';
+            } else {
+                urlInput.style.display = 'block';
+                fileInput.style.display = 'none';
+            }
         }
 
         document.getElementById('goBtn').onclick = async () => {
-            const val = document.getElementById('urlInput').value.trim();
-            if(!val) return;
-            
-            document.getElementById('goBtn').innerText = '... جاري التنفيذ';
-            
-            try {
-                const r = await fetch(`/api/tools?url=${encodeURIComponent(val)}&type=${mode}`);
-                const j = await r.json();
+            const btn = document.getElementById('goBtn');
+            btn.disabled = true;
 
-                if(j.code === 0 || j.success) {
-                    const d = j.data;
-                    document.getElementById('resImg').src = mode === 'tiktok' ? d.cover : d.high;
-                    document.getElementById('dlLink').href = mode === 'tiktok' ? (d.hdplay || d.play) : d.high;
+            if(mode === 'bg_rem') {
+                if(!fileInput.files[0]) { alert('اختر صورة أولاً'); btn.disabled = false; return; }
+                btn.innerText = 'جاري المعالجة بالذكاء الاصطناعي...';
+                try {
+                    const blob = await imglyRemoveBackground(fileInput.files[0]);
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('resImg').src = url;
+                    document.getElementById('dlLink').href = url;
+                    document.getElementById('dlLink').download = "NexDown_NoBG.png";
                     document.getElementById('displayArea').style.display = 'block';
-                } else { alert('خطأ في الرابط!'); }
-            } catch(e) { alert('فشل الاتصال!'); }
-            finally { document.getElementById('goBtn').innerText = 'بدء السحر'; }
+                } catch (e) { alert('خطأ في المعالجة'); }
+            } else {
+                const val = urlInput.value.trim();
+                if(!val) { alert('أدخل الرابط'); btn.disabled = false; return; }
+                btn.innerText = 'جاري جلب البيانات...';
+                try {
+                    const r = await fetch(`/api/tools?url=${encodeURIComponent(val)}&type=${mode}`);
+                    const j = await r.json();
+                    if((mode==='tiktok' && j.code===0) || (mode==='yt_thumb' && j.success)) {
+                        const d = j.data;
+                        document.getElementById('resImg').src = mode==='tiktok' ? d.cover : d.high;
+                        document.getElementById('dlLink').href = mode==='tiktok' ? (d.hdplay||d.play) : d.high;
+                        document.getElementById('displayArea').style.display = 'block';
+                    } else { alert('رابط غير صحيح'); }
+                } catch(e) { alert('خطأ في الاتصال'); }
+            }
+            btn.innerText = 'بدء السحر';
+            btn.disabled = false;
         }
     </script>
 </body>
 </html>
-
