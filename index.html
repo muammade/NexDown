@@ -9,28 +9,19 @@
         :root { --main: #00f2fe; --sub: #4facfe; --dark: #080a12; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
         body { background: var(--dark); color: white; min-height: 100vh; overflow-x: hidden; }
-        
-        /* خلفية سينمائية متحركة */
-        .bg-animate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
-            background: radial-gradient(circle at 50% 50%, #1a1f35 0%, #080a12 100%); }
+        .bg-animate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1f35 0%, #080a12 100%); }
         .glow { position: absolute; width: 300px; height: 300px; background: var(--sub); filter: blur(120px); opacity: 0.15; border-radius: 50%; animation: move 10s infinite alternate; }
         @keyframes move { from { transform: translate(-10%, -10%); } to { transform: translate(100%, 50%); } }
-
         nav { padding: 25px 5%; display: flex; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .logo { font-size: 2rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #fff; text-shadow: 0 0 15px var(--sub); }
-        
         .container { max-width: 800px; margin: 40px auto; padding: 20px; text-align: center; }
         .hero-title { font-size: 2.8rem; font-weight: 900; margin-bottom: 10px; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
         .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
         .tab { padding: 12px 25px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; cursor: pointer; transition: 0.3s; font-weight: 700; }
         .tab.active { background: var(--sub); border-color: var(--main); box-shadow: 0 0 20px rgba(79, 172, 254, 0.4); color: #000; }
-
         .search-box { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; backdrop-filter: blur(10px); }
         input { flex: 1; background: transparent; border: none; padding: 15px; color: white; font-size: 1.1rem; outline: none; text-align: right; }
         .btn { padding: 0 30px; border-radius: 15px; border: none; background: #fff; color: #000; font-weight: 900; cursor: pointer; transition: 0.3s; }
-        .btn:hover { transform: scale(1.05); background: var(--main); }
-
         #result { display: none; margin-top: 40px; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .preview-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); }
@@ -41,23 +32,18 @@
 <body>
     <div class="bg-animate"></div>
     <div class="glow"></div>
-    
     <nav><div class="logo">NEXDOWN</div></nav>
-
     <div class="container">
-        <h1 class="hero-title">تحميل المحتوى بلمشة واحدة</h1>
-        
+        <h1 class="hero-title">تحميل المحتوى بلمسة واحدة</h1>
         <div class="tabs">
             <div class="tab active" onclick="setMode('tiktok', this)">TikTok</div>
             <div class="tab" onclick="setMode('insta', this)">Instagram</div>
             <div class="tab" onclick="setMode('yt_thumb', this)">YouTube</div>
         </div>
-
         <div class="search-box">
             <input type="text" id="url" placeholder="ضع الرابط هنا...">
             <button class="btn" id="go">بدء</button>
         </div>
-
         <div id="result">
             <div class="preview-card">
                 <img id="resImg" class="preview-img" src="">
@@ -77,7 +63,7 @@
 
         document.getElementById('go').onclick = async () => {
             const val = document.getElementById('url').value.trim();
-            if(!val) return;
+            if(!val) return alert("يرجى إدخال الرابط أولاً");
             const btn = document.getElementById('go');
             btn.innerText = '...';
             
@@ -105,15 +91,17 @@
                     document.getElementById('resLink').href = finalLink;
                     document.getElementById('result').style.display = 'block';
                     
-                    // تحسين: فتح الرابط مباشرة في حال كان انستجرام فيديو
-                    if(mode === 'insta') document.getElementById('resLink').innerText = "اضغط هنا لتحميل الريلز / الصورة";
+                    if(mode === 'insta') document.getElementById('resLink').innerText = "تحميل الريلز / الصورة ↓";
+                    else document.getElementById('resLink').innerText = "تحميل الملف الآن ↓";
+                    
                 } else { 
-                    alert('هذا الرابط لم ينجح، جرب رابطاً آخر من انستجرام'); 
+                    alert('عذراً، لم نتمكن من جلب بيانات هذا الرابط'); 
                 }
-            } catch (e) { alert('خطأ في الاتصال'); }
+            } catch (e) { 
+                alert('خطأ في الاتصال بالسيرفر'); 
+            }
             btn.innerText = 'بدء';
         }
     </script>
 </body>
 </html>
-
