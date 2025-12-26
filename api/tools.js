@@ -1,49 +1,44 @@
-let mode = 'tiktok'; // الأداة الافتراضية عند فتح الموقع
+let mode = 'tiktok';
 
-        // وظيفة التبديل بين الأدوات وتغيير شكل البطاقات
         function setTool(t, el) {
             mode = t;
-            // إزالة الحالة النشطة من جميع البطاقات وإضافتها للمختارة
             document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
-            
-            // تنبيه بسيط للأداة التي لم تكتمل بعد
-            if(t === 'bg_rem') alert('هذه الميزة ستتوفر في التحديث القادم!');
-            
-            // إخفاء منطقة النتائج عند التبديل لبدء عملية جديدة
             document.getElementById('displayArea').style.display = 'none';
         }
 
-        // عند الضغط على زر "بدء السحر"
         document.getElementById('goBtn').onclick = async () => {
             const val = document.getElementById('urlInput').value.trim();
-            if(!val) return alert('الرجاء إدخال رابط');
+            if(!val) return alert('الرجاء إدخال الرابط');
             
             const btn = document.getElementById('goBtn');
-            btn.innerText = '... جاري التنفيذ';
-            btn.disabled = true;
+            btn.innerText = 'جاري المعالجة...';
             
             try {
-                // نرسل الطلب إلى المسار الجديد api/tools
-                const r = await fetch(`/api/tools?url=${encodeURIComponent(val)}&type=${mode}`);
-                const j = await r.json();
+                // نستخدم مسار api/tools الذي أنشأناه
+                const response = await fetch(`/api/tools?url=${encodeURIComponent(val)}&type=${mode}`);
+                
+                if (!response.ok) throw new Error('السيرفر لا يستجيب');
+                
+                const j = await response.json();
 
-                if(j.code === 0 || j.success) {
-                    const d = j.data;
-                    // عرض النتيجة حسب نوع الأداة (تيك توك أو يوتيوب)
-                    document.getElementById('resImg').src = mode === 'tiktok' ? d.cover : d.high;
-                    document.getElementById('dlLink').href = mode === 'tiktok' ? (d.hdplay || d.play) : d.high;
+                if (mode === 'tiktok' && j.code === 0) {
+                    document.getElementById('resImg').src = j.data.cover;
+                    document.getElementById('dlLink').href = j.data.hdplay || j.data.play;
                     document.getElementById('displayArea').style.display = 'block';
-                    
-                    // تحريك الصفحة للأسفل لرؤية النتيجة
-                    document.getElementById('displayArea').scrollIntoView({ behavior: 'smooth' });
-                } else { 
-                    alert('عذراً، لم نتمكن من جلب البيانات. تأكد من الرابط.'); 
+                } 
+                else if (mode === 'yt_thumb' && j.success) {
+                    document.getElementById('resImg').src = j.data.high;
+                    document.getElementById('dlLink').href = j.data.high;
+                    document.getElementById('displayArea').style.display = 'block';
+                } 
+                else {
+                    alert('هذا الرابط لا يحتوي على بيانات عامة أو غير مدعوم');
                 }
-            } catch(e) { 
-                alert('فشل الاتصال بالسيرفر!'); 
+            } catch (e) {
+                console.error(e);
+                alert('حدث خطأ في الاتصال: تأكد من رفع ملف api/tools.js بشكل صحيح');
             } finally {
                 btn.innerText = 'بدء السحر';
-                btn.disabled = false;
             }
         }
